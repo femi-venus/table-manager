@@ -1,0 +1,86 @@
+* {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 20px;
+}
+table,
+td,
+th {
+  margin-top: 50px;
+  border: 1px solid;
+  border-collapse: collapse;
+}
+.table-manager {
+  margin-left: 10px;
+}
+.table-header {
+  border-collapse: collapse;
+  padding: 10px;
+  background-color: rgb(174, 170, 170);
+}
+.table--body {
+  margin: 5px;
+}
+.table--input {
+  padding: 5px;
+}
+td {
+  padding: 10px;
+  text-align: center;
+}
+.table-filters {
+  box-shadow: 1px 1px 3px 1px;
+  margin: 20px 1300px 10px 10px;
+}
+.table--details {
+  box-shadow: 1px 1px 3px 1px;
+  margin: 20px 1300px 10px 10px;
+  padding: 10px;
+}
+
+.table-button {
+  background-color: black;
+  color: white;
+  margin: 30px 10px;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.cl--main {
+  width: 300px;
+}
+
+.cl--display {
+  width: 280px;
+  padding: 2px;
+
+  margin-bottom: 0px;
+  margin-left: 3px;
+  border-width: 1px;
+}
+
+.cl--items {
+  width: 210px;
+  height: 110px;
+  margin-top: 0%;
+  border: solid;
+  border-width: 1px;
+  text-align: left;
+  overflow-y: scroll;
+  font-size: 15px;
+  padding: 10px;
+  margin-left: 7px;
+  position: absolute;
+  background-color: white;
+}
+
+.cl--search {
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: rgb(178, 177, 177);
+}
+.cl--search:focus {
+  border-radius: 5px;
+  border-width: 0px;
+  border-color: rgb(178, 177, 177);
+  box-shadow: 0 0 0 2px rgb(171, 236, 248);
+}
