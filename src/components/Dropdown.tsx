@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react";
 import _ from "lodash";
-import "./tablemanager.css";
+import { Control, useController } from "react-hook-form";
 
 interface Props {
-  items: string[];
+  items: { id: number; value: string; label: string }[];
   onChange: (options: string[]) => void;
+  options?: string[];
+  control: Control<any>;
+  name: string;
 }
 
 export default function Dropdown(props: Props) {
-  const { items, onChange } = props;
+  const { items, control, name } = props;
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string[]>([]);
+  const {
+    formState: { errors },
+  } = useController({ control, name });
+  const msg = _.toString(errors[name]?.message);
 
   const handleChange = (item: string) => {
     setSelectedItem((prev) => {
@@ -22,10 +29,6 @@ export default function Dropdown(props: Props) {
     });
   };
 
-  useEffect(() => {
-    onChange(selectedItem);
-  }, [selectedItem, onChange]);
-
   const selectedOptions = _.join(selectedItem, ", ");
 
   return (
@@ -34,27 +37,30 @@ export default function Dropdown(props: Props) {
         <input
           className="cl--display"
           type="text"
+          placeholder="Select..."
           value={selectedOptions}
           onClick={() => setOpen(!open)}
-          readOnly
+          {...control.register(name, {
+            required: `${name} is required`,
+          })}
         />
+        {errors[name] && <div className="errors">{msg}</div>}
       </div>
 
       {open && (
         <div className="cl--items">
-          {items.map((item, index) => (
+          {items.map((item) => (
             <label
-              key={index}
-              onChange={() => handleChange(item)}
+              key={item.id}
+              onChange={() => handleChange(item.label)}
               className="cl--item"
             >
               <input
                 className="checkbox"
-                checked={selectedItem.includes(item)}
+                checked={selectedItem.includes(item.label)}
                 type="checkbox"
-                onChange={() => onChange(selectedItem)}
               />
-              {item}
+              {item.label}
               <br />
             </label>
           ))}
