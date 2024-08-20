@@ -1,21 +1,18 @@
-import React from "react";
 import "./tablemanager.css";
-
 import _ from "lodash";
-
 import { config } from "./config";
 import Form from "./Form";
 import { useTableContext } from "./TableManagerProvider";
 import { Data } from "./types";
 
 function Table() {
-  const { state, handleSelect, handleDelete } = useTableContext();
+  const { data, checkedIds, SetSelectRow, SetDeleteRow } = useTableContext();
 
   return (
     <table className="table">
       <thead>
         <tr>
-          {config.headers.map((header, key) => (
+          {_.map(config.headers, (header, key) => (
             <th key={key} className="table-header">
               {header}
             </th>
@@ -23,16 +20,16 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        {state.data.map((content, index) => (
+        {_.map(data, (content, index) => (
           <tr key={index} className="table--body">
             <td>
               <input
                 type="checkbox"
-                checked={content.checked}
-                onChange={() => handleSelect(index)}
+                checked={_.includes(checkedIds, content.id)}
+                onChange={() => SetSelectRow(content.id)}
               />
             </td>
-            <td>{index + 1}</td>
+            <td>{content.id}</td>
             <td>{content.name}</td>
             <td>{content.description}</td>
             <td>
@@ -42,7 +39,7 @@ function Table() {
             <td>{content.nutrition}</td>
             <td>{content.intake}</td>
             <td>
-              <button onClick={() => handleDelete(index)}>Delete</button>
+              <button onClick={() => SetDeleteRow(content.id)}>Delete</button>
             </td>
           </tr>
         ))}
@@ -52,46 +49,59 @@ function Table() {
 }
 
 function Filters() {
-  const {
-    state,
-    handleDetails,
-    handleLog,
-    handleFilteredDelete,
-    handleAdd,
-    handleAddData,
-  } = useTableContext();
+  const { SetDisplayAction } = useTableContext();
   return (
     <div className="table-filters">
-      <button className="table-button" onClick={handleDetails}>
+      <button
+        className="table-button"
+        onClick={() => SetDisplayAction("DETAILS")}
+      >
         Details
       </button>
-      <button className="table-button" onClick={handleLog}>
+      <button className="table-button" onClick={() => SetDisplayAction("LOG")}>
         Log
       </button>
-      <button className="table-button" onClick={handleFilteredDelete}>
+      <button
+        className="table-button"
+        onClick={() => SetDisplayAction("REMOVE")}
+      >
         Delete
       </button>
-      <button className="table-button" onClick={handleAdd}>
+      <button className="table-button" onClick={() => SetDisplayAction("ADD")}>
         Add
       </button>
     </div>
   );
 }
 
-function Displays() {
-  const { state, handleDeleteYes, handleDeleteNo, handleAddData } =
-    useTableContext();
-  const filtered_data = state.data.filter((data) => data.checked === true);
+function Actions() {
+  const {
+    data,
+    checkedIds,
+    displaySection,
+    SetConfirmDelete,
+    SetIgnoreDelete,
+    SetAddData,
+  } = useTableContext();
 
-  function handleAddDataSubmit(data: Data) {
-    handleAddData(data);
+  const filteredData = _.filter(data, (data) =>
+    _.includes(checkedIds, data.id)
+  );
+
+  function SetAddDataSubmit(data: Data) {
+    SetAddData(data);
+  }
+  {
+    if (displaySection === "LOG") {
+      console.log(filteredData);
+    }
   }
 
   return (
     <div>
-      {_.size(filtered_data) === 1 && state.display && (
+      {_.size(filteredData) === 1 && displaySection === "DETAILS" && (
         <div>
-          {filtered_data.map((data, index) => (
+          {_.map(filteredData, (data, index) => (
             <div key={index} className="table--details">
               <p>{data.name} is a superfood. </p>
               <p>{data.description}</p>
@@ -105,20 +115,21 @@ function Displays() {
           ))}
         </div>
       )}
-      {_.size(filtered_data) >= 1 && state.delete && (
+
+      {_.size(filteredData) >= 1 && displaySection === "REMOVE" && (
         <div className="table--delete">
           <p>Do you want to delete the selected items?</p>
-          <button className="table-button" onClick={handleDeleteYes}>
+          <button className="table-button" onClick={SetConfirmDelete}>
             Yes
           </button>
-          <button className="table-button" onClick={handleDeleteNo}>
+          <button className="table-button" onClick={SetIgnoreDelete}>
             No
           </button>
         </div>
       )}
-      {state.add && (
+      {displaySection === "ADD" && (
         <div className="table--form">
-          <Form onSubmitData={handleAddDataSubmit} />
+          <Form onSubmitData={SetAddDataSubmit} />
         </div>
       )}
     </div>
@@ -130,7 +141,7 @@ export default function TableManager() {
     <div className="table-manager">
       <Table />
       <Filters />
-      <Displays />
+      <Actions />
     </div>
   );
 }

@@ -114,6 +114,9 @@ td {
   margin-left: 7px;
   position: absolute;
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .cl--search {

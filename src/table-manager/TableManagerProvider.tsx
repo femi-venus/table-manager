@@ -5,8 +5,9 @@ import {
   useMemo,
   useReducer,
 } from "react";
-import { TableContextProps, Data } from "./types";
+import { DisplaySection, TableContextProps, State, Data } from "./types";
 import { reducer, initialState } from "./TableReducer";
+import _ from "lodash";
 
 const TableContext = createContext<TableContextProps | null>(null);
 
@@ -14,58 +15,44 @@ export default function TableManagerProvider(props: PropsWithChildren<{}>) {
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const handleDelete = (index: number) => {
-    dispatch({ type: "deleteData", payload: index });
+  const SetDeleteRow = (id: number) => {
+    dispatch({ type: "delete-data", payload: id });
   };
 
-  function handleSelect(index: number) {
-    dispatch({ type: "setChecked", payload: index });
-  }
+  const SetSelectRow = (id: number) => {
+    dispatch({ type: "set-selected", payload: id });
+  };
 
-  function handleFilteredDelete() {
-    dispatch({ type: "displayDelete" });
-  }
+  const SetConfirmDelete = () => {
+    dispatch({ type: "delete-filtered-data" });
+  };
 
-  function handleDeleteYes() {
-    dispatch({ type: "deleteFilteredData" });
-  }
+  const SetIgnoreDelete = () => {
+    dispatch({ type: "!delete-filtered-data" });
+  };
 
-  function handleDeleteNo() {
-    dispatch({ type: "displayDelete" });
-  }
+  const SetAddData = (data: Data) => {
+    dispatch({ type: "add-data", payload: data });
+  };
 
-  function handleDetails() {
-    dispatch({ type: "displayDetails" });
-  }
-
-  function handleLog() {
-    dispatch({ type: "displayLog" });
-    const filteredData = state.data.filter((data) => data.checked === true);
-    console.log(filteredData);
-  }
-
-  function handleAdd() {
-    dispatch({ type: "displayAdd" });
-  }
-
-  function handleAddData(data: Data) {
-    dispatch({ type: "addData", payload: data });
-  }
+  const SetDisplayAction = (actionType: DisplaySection) => {
+    dispatch({ type: "display-data", payload: actionType });
+  };
 
   const memoizedValue = useMemo(
     () => ({
-      state,
-      handleDelete,
-      handleSelect,
-      handleFilteredDelete,
-      handleDeleteYes,
-      handleDeleteNo,
-      handleDetails,
-      handleLog,
-      handleAdd,
-      handleAddData,
+      displaySection: state.displaySection,
+      data: state.data,
+      clearDropdown: state.clearDropdown,
+      checkedIds: state.checkedIds,
+      SetDeleteRow,
+      SetSelectRow,
+      SetConfirmDelete,
+      SetIgnoreDelete,
+      SetAddData,
+      SetDisplayAction,
     }),
-    [state]
+    [state, dispatch]
   );
 
   return (

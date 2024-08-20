@@ -43,13 +43,14 @@ export default function Dropdown(props: Props) {
           {...control.register(name, {
             required: `${name} is required`,
           })}
+          readOnly
         />
         {errors[name] && <div className="errors">{msg}</div>}
       </div>
 
       {open && (
         <div className="cl--items">
-          {items.map((item) => (
+          {_.map(items, (item) => (
             <label
               key={item.id}
               onChange={() => handleChange(item.label)}
@@ -59,9 +60,9 @@ export default function Dropdown(props: Props) {
                 className="checkbox"
                 checked={selectedItem.includes(item.label)}
                 type="checkbox"
+                readOnly
               />
               {item.label}
-              <br />
             </label>
           ))}
         </div>

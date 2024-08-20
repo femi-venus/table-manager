@@ -1,60 +1,51 @@
 import produce from "immer";
 import { State, Action } from "./types";
+import _ from "lodash";
 
 export const reducer = produce((state: State, action: Action) => {
   switch (action.type) {
-    case "setChecked":
-      state.data = state.data.map((data, i) =>
-        i === action.payload ? { ...data, checked: !data.checked } : data
-      );
+    case "set-selected":
+      const id = action.payload;
+      const isChecked = _.includes(state.checkedIds, id);
+      state.checkedIds = isChecked
+        ? _.filter(state.checkedIds, (checkedId) => checkedId !== id)
+        : [...state.checkedIds, id];
       break;
 
-    case "deleteData":
-      state.data = state.data.filter((_, index) => index !== action.payload);
+    case "delete-data":
+      state.data = _.filter(state.data, (data) => data.id !== action.payload);
+
       break;
 
-    case "addData":
+    case "add-data":
       state.data = [...state.data, action.payload];
       break;
 
-    case "deleteFilteredData":
-      state.data = state.data.filter((data) => !data.checked);
+    case "delete-filtered-data":
+      state.data = _.filter(
+        state.data,
+        (data) => !_.includes(state.checkedIds, data.id)
+      );
+      state.checkedIds = [];
       break;
-
-    case "displayDetails":
-      state.display = !state.display;
-      state.delete = false;
-      state.log = false;
-      state.add = false;
+    case "!delete-filtered-data":
+      state.checkedIds = [];
       break;
-
-    case "displayLog":
-      state.log = !state.log;
-      state.display = false;
-      state.delete = false;
-      state.add = false;
-      break;
-
-    case "displayDelete":
-      state.delete = !state.delete;
-      state.display = false;
-      state.log = false;
-      state.add = false;
-      break;
-
-    case "displayAdd":
-      state.add = !state.add;
-      state.display = false;
-      state.log = false;
-      state.delete = false;
-      break;
-
-    case "setClearDropdown":
-      state.clearDropdown = true;
-      break;
-
-    case "setDropdown":
-      state.clearDropdown = false;
+    case "display-data":
+      switch (action.payload) {
+        case "REMOVE":
+          state.displaySection = "REMOVE";
+          break;
+        case "DETAILS":
+          state.displaySection = "DETAILS";
+          break;
+        case "LOG":
+          state.displaySection = "LOG";
+          break;
+        case "ADD":
+          state.displaySection = "ADD";
+          break;
+      }
       break;
 
     default:
@@ -63,31 +54,28 @@ export const reducer = produce((state: State, action: Action) => {
 });
 
 export const initialState: State = {
-  checked: false,
-  display: false,
-  delete: false,
-  log: false,
+  checkedIds: [],
+
   clearDropdown: false,
-  add: false,
+
+  displaySection: "NONE",
   data: [
     {
-      checked: false,
       id: 1,
       name: "Potato",
       description: "It is healthy.",
       link: "https://en.wikipedia.org/wiki/Potato",
       should_cook: "Yes",
-      nutrition: ["carbohydrates, ", "dietary fiber"],
+      nutrition: ["Carbohydrates, ", "Dietary fiber"],
       intake: "100g",
     },
     {
-      checked: false,
       id: 2,
       name: "Tomato",
       description: "It is red.",
       link: "https://en.wikipedia.org/wiki/Tomato",
       should_cook: "No",
-      nutrition: ["lycopene, ", "antioxidants"],
+      nutrition: ["Lycopene, ", "Antioxidants"],
       intake: "200g",
     },
   ],

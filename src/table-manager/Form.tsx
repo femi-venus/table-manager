@@ -5,18 +5,13 @@ import RadioInput from "../components/RadioInput";
 import TextInput from "../components/TextInput";
 import { config } from "./config";
 import { Data } from "./types";
+import { useTableContext } from "./TableManagerProvider";
 
 interface FormProps {
   onSubmitData: (data: Data) => void;
 }
 
 function RadioFormField({ control }: { control: Control<any> }) {
-  // const {
-  //   formState: { errors },
-  // } = useController({
-  //   control,
-  //   name,
-  // });
   return (
     <div className="radio-input">
       Should cook?
@@ -27,22 +22,17 @@ function RadioFormField({ control }: { control: Control<any> }) {
 }
 
 export default function Form(props: FormProps) {
+  const { data } = useTableContext();
   const { control, handleSubmit, setValue } = useForm<Data>();
   const [nutrition, setNutrition] = useState<string[]>([]);
   const { onSubmitData } = props;
 
-  const patterns = {
-    name: /^[A-Za-z]+$/,
-    description: /^[A-Z][a-zA-Z\s,;:'"-]*[.!?]$/,
-    link: /^(https?:\/\/)?([\w\d-]+\.)+[a-z]{2,6}(:\d{1,5})?(\/[^\s]*)?$/,
-    intake: /^\d+(\.\d+)?\s?g$/,
+  const onSubmit = (datas: Data) => {
+    onSubmitData({ ...datas, id: data.length + 1 });
+    console.log("New Row Added!");
   };
 
-  const onSubmit = (data: Data) => {
-    onSubmitData(data);
-  };
-
-  const handleNutrition = (options: string[]) => {
+  const handleSelectOption = (options: string[]) => {
     setNutrition(options);
     setValue("nutrition", options);
   };
@@ -54,19 +44,19 @@ export default function Form(props: FormProps) {
           control={control}
           name="name"
           required
-          inputPattern={patterns.name}
+          inputPattern={config.patterns.name}
         />
         <TextInput
           control={control}
           name="description"
           required
-          inputPattern={patterns.description}
+          inputPattern={config.patterns.description}
         />
         <TextInput
           control={control}
           name="link"
           required
-          inputPattern={patterns.link}
+          inputPattern={config.patterns.link}
         />
 
         <RadioFormField control={control} />
@@ -74,7 +64,7 @@ export default function Form(props: FormProps) {
         <Dropdown
           items={config.nutrition}
           options={nutrition}
-          onChange={handleNutrition}
+          onChange={handleSelectOption}
           control={control}
           name="nutrition"
         />
@@ -82,7 +72,7 @@ export default function Form(props: FormProps) {
           control={control}
           name="intake"
           required
-          inputPattern={patterns.intake}
+          inputPattern={config.patterns.intake}
         />
         <button className="form-button" type="submit">
           Add

@@ -1,5 +1,4 @@
 export interface Data {
-  checked: boolean;
   id: number;
   name: string;
   description: string;
@@ -9,37 +8,34 @@ export interface Data {
   intake: string;
 }
 
+export type DisplaySection = "NONE" | "DETAILS" | "LOG" | "REMOVE" | "ADD";
+
 export interface State {
-  checked: boolean;
-  display: boolean;
-  delete: boolean;
-  log: boolean;
+  checkedIds: number[];
   clearDropdown: boolean;
-  add: boolean;
   data: Data[];
+  displaySection: DisplaySection;
 }
 
 export type Action =
-  | { type: "setChecked"; payload: number }
-  | { type: "deleteData"; payload: number }
-  | { type: "addData"; payload: Data }
-  | { type: "deleteFilteredData" }
-  | { type: "displayDetails" }
-  | { type: "displayLog" }
-  | { type: "displayDelete" }
-  | { type: "setClearDropdown" }
-  | { type: "setDropdown" }
-  | { type: "displayAdd" };
+  | { type: "set-selected"; payload: number }
+  | { type: "delete-data"; payload: number }
+  | { type: "add-data"; payload: Data }
+  | { type: "delete-filtered-data" }
+  | { type: "!delete-filtered-data" }
+  | { type: "display-data"; payload: DisplaySection };
 
 export interface TableContextProps {
-  state: State;
-  handleDelete: (index: number) => void;
-  handleSelect: (index: number) => void;
-  handleFilteredDelete: () => void;
-  handleDeleteYes: () => void;
-  handleDeleteNo: () => void;
-  handleDetails: () => void;
-  handleLog: () => void;
-  handleAdd: () => void;
-  handleAddData: (data: Data) => void;
+  checkedIds: number[];
+  clearDropdown: boolean;
+  data: Data[];
+  displaySection: DisplaySection;
+  SetDeleteRow: (index: number) => void;
+  SetSelectRow: (index: number) => void;
+  SetConfirmDelete: () => void;
+  SetIgnoreDelete: () => void;
+  SetAddData: (data: Data) => void;
+  SetDisplayAction: (
+    DisplaySection: "DETAILS" | "LOG" | "REMOVE" | "ADD" | "NONE"
+  ) => void;
 }

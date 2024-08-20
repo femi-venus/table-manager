@@ -37,4 +37,10 @@ export const config = {
     { id: 1, value: "Yes", label: "Yes" },
     { id: 2, value: "No", label: "No" },
   ],
+  patterns: {
+    name: /^[A-Za-z]+$/,
+    description: /^[A-Z][a-zA-Z\s,;:'"-]*[.!?]$/,
+    link: /^(https?:\/\/)?([\w\d-]+\.)+[a-z]{2,6}(:\d{1,5})?(\/[^\s]*)?$/,
+    intake: /^\d+(\.\d+)?\s?g$/,
+  },
 };
