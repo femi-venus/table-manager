@@ -14,6 +14,7 @@ export interface State {
   checkedIds: number[];
   clearDropdown: boolean;
   data: Data[];
+  items: Data[];
   displaySection: DisplaySection;
 }
 
@@ -21,19 +22,19 @@ export type Action =
   | { type: "set-selected"; payload: number }
   | { type: "delete-data"; payload: number }
   | { type: "add-data"; payload: Data }
-  | { type: "delete-filtered-data" }
-  | { type: "!delete-filtered-data" }
+  | { type: "delete-filtered-data"; payload: boolean }
   | { type: "display-data"; payload: DisplaySection };
 
 export interface TableContextProps {
   checkedIds: number[];
   clearDropdown: boolean;
   data: Data[];
+  items: Data[];
   displaySection: DisplaySection;
   SetDeleteRow: (index: number) => void;
   SetSelectRow: (index: number) => void;
-  SetConfirmDelete: () => void;
-  SetIgnoreDelete: () => void;
+  SetConfirmDelete: (option: boolean) => void;
+
   SetAddData: (data: Data) => void;
   SetDisplayAction: (
     DisplaySection: "DETAILS" | "LOG" | "REMOVE" | "ADD" | "NONE"

@@ -15,20 +15,16 @@ export default function TableManagerProvider(props: PropsWithChildren<{}>) {
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const SetDeleteRow = (id: number) => {
-    dispatch({ type: "delete-data", payload: id });
-  };
-
   const SetSelectRow = (id: number) => {
     dispatch({ type: "set-selected", payload: id });
   };
 
-  const SetConfirmDelete = () => {
-    dispatch({ type: "delete-filtered-data" });
+  const SetDeleteRow = (id: number) => {
+    dispatch({ type: "delete-data", payload: id });
   };
 
-  const SetIgnoreDelete = () => {
-    dispatch({ type: "!delete-filtered-data" });
+  const SetConfirmDelete = (option: boolean) => {
+    dispatch({ type: "delete-filtered-data", payload: option });
   };
 
   const SetAddData = (data: Data) => {
@@ -45,10 +41,11 @@ export default function TableManagerProvider(props: PropsWithChildren<{}>) {
       data: state.data,
       clearDropdown: state.clearDropdown,
       checkedIds: state.checkedIds,
+      items: state.items,
       SetDeleteRow,
       SetSelectRow,
       SetConfirmDelete,
-      SetIgnoreDelete,
+
       SetAddData,
       SetDisplayAction,
     }),

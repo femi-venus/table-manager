@@ -28,7 +28,8 @@ export default function Form(props: FormProps) {
   const { onSubmitData } = props;
 
   const onSubmit = (datas: Data) => {
-    onSubmitData({ ...datas, id: data.length + 1 });
+    const highestId = data.length;
+    onSubmitData({ ...datas, id: highestId + 1 });
     console.log("New Row Added!");
   };
 
