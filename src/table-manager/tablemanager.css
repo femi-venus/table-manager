@@ -11,11 +11,13 @@ th {
 }
 .table-manager {
   margin-left: 10px;
+  margin-right: 10px;
 }
 .table-header {
   border-collapse: collapse;
   padding: 10px;
   background-color: rgb(174, 170, 170);
+  width: 600px;
 }
 .table--body {
   margin: 5px;
@@ -28,13 +30,29 @@ td {
   text-align: center;
 }
 .table-filters {
+  width: 600px;
   box-shadow: 1px 1px 3px 1px;
   margin: 20px 1300px 10px 10px;
 }
 .table--details {
+  width: 500px;
   box-shadow: 1px 1px 3px 1px;
   margin: 20px 1300px 10px 10px;
   padding: 10px;
+}
+.table--delete {
+  width: 500px;
+  box-shadow: 1px 1px 3px 1px;
+  margin: 20px 1300px 10px 10px;
+  padding: 10px;
+}
+.text-input {
+  margin: 5px;
+  height: 30px;
+  width: 280px;
+}
+.radio-input {
+  margin: 5px;
 }
 
 .table-button {
@@ -43,6 +61,31 @@ td {
   margin: 30px 10px;
   padding: 5px;
   border-radius: 3px;
+  width: 100px;
+}
+.table-button:hover {
+  background-color: white;
+  color: black;
+}
+
+.form-button {
+  background-color: black;
+  color: white;
+  margin: 5px 2px;
+  padding: 2px;
+  border-radius: 2px;
+  width: 70px;
+}
+.form-button:hover {
+  background-color: white;
+  color: black;
+}
+
+.table--form {
+  width: 500px;
+  box-shadow: 1px 1px 3px 1px;
+  margin: 20px 1300px 10px 10px;
+  padding: 10px;
 }
 
 .cl--main {
@@ -52,9 +95,10 @@ td {
 .cl--display {
   width: 280px;
   padding: 2px;
-
+  height: 30px;
+  margin-top: 5px;
   margin-bottom: 0px;
-  margin-left: 3px;
+  margin-left: 5px;
   border-width: 1px;
 }
 
@@ -71,6 +115,9 @@ td {
   margin-left: 7px;
   position: absolute;
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .cl--search {
@@ -83,4 +130,12 @@ td {
   border-width: 0px;
   border-color: rgb(178, 177, 177);
   box-shadow: 0 0 0 2px rgb(171, 236, 248);
+}
+
+.input-form {
+  width: 600px;
+}
+.errors {
+  color: red;
+  font-size: 15px;
 }
